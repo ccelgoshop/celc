@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celestial Software | Exclusive Access</title>
+    <style>
+        :root {
+            --accent: #00d4ff;
+            --bg: #05070a;
+            --card-bg: #0f1218;
+            --text: #ffffff;
+            --secondary: #6b7280;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px 5%;
+            text-align: center;
+            border-bottom: 1px solid #1e222b;
+            background: rgba(15, 18, 24, 0.9);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--accent);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid #1e222b;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .status-badge {
+            font-size: 0.8rem;
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        h2 { margin: 0 0 10px; font-size: 2rem; }
+        .description { color: var(--secondary); margin-bottom: 30px; line-height: 1.5; }
+
+        .plan-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .plan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #161b22;
+            border: 1px solid #2d333b;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .plan-item:hover {
+            border-color: var(--accent);
+            background: #1c212c;
+        }
+
+        input[type="radio"] {
+            margin-right: 15px;
+            accent-color: var(--accent);
+        }
+
+        .plan-price {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .buy-btn {
+            width: 100%;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.2s;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid var(--accent);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .key-output {
+            background: #000;
+            color: var(--accent);
+            padding: 20px;
+            font-family: monospace;
+            font-size: 1.4rem;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px dashed #444;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Celestial</div>
+</header>
+
+<div class="main-content">
+    <div class="product-card">
+        <div class="status-badge">● UNDETECTED</div>
+        <h2>Celestial Software</h2>
+        <p class="description">Premium multi-tool solution. Secure, fast, and constantly updated for the best experience.</p>
+
+        <div class="plan-list">
+            <label class="plan-item">
+                <span><input type="radio" name="sub" checked> 1 Day Access</span>
+                <span class="plan-price">$1.99</span>
+            </label>
+            <label class="plan-item">
+                <span><input type="radio" name="sub"> 3 Days Access</span>
+                <span class="plan-price">$3.00</span>
+            </label>
+            <label class="plan-item">
+                <span><input type="radio" name="sub"> 7 Days Access</span>
+                <span class="plan-price">$5.00</span>
+            </label>
+            <label class="plan-item">
+                <span><input type="radio" name="sub"> 30 Days Access</span>
+                <span class="plan-price">$12.99</span>
+            </label>
+        </div>
+
+        <button class="buy-btn" onclick="generateAndShow()">Purchase Key</button>
+    </div>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-top:0">Activation Successful</h3>
+        <p style="color: var(--secondary)">Save your unique license key:</p>
+        <div class="key-output" id="keyDisplay"></div>
+        <button class="buy-btn" style="background:#222; color:#fff;" onclick="closeModal()">Close</button>
+    </div>
+</div>
+
+<script>
+    function generateAndShow() {
+        const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        const segment = () => Array.from({length: 4}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+        const fullKey = `${segment()}-${segment()}-${segment()}-${segment()}`;
+        
+        document.getElementById('keyDisplay').innerText = fullKey;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
